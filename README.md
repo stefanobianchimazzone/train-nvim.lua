@@ -1,16 +1,80 @@
-# nvim-plugin-template
+# train-nvim
+An interactive Neovim plugin to help you learn and practice Neovim motions and custom keymaps through guided exercises and real-time feedback.
 
-Neovim plugin template; includes automatic documentation generation from README, integration tests with Busted, and linting with Stylua
+## Prerequisites 
 
-## Usage
+### macOS Setup
 
-1. Click `use this template` button generate a repo on your github.
-2. Clone your plugin repo. Open terminal then cd plugin directory.
-3. Run `python3 rename.py your-plugin-name`. This will replace all `nvim-plugin-template` to your `plugin-name`. 
-   Then it will prompt you input `y` or `n` to remove example codes in `init.lua` and
-   `test/plugin_spec.lua`. If you are familiar this repo just input `y`. If you are looking at this template for the first time I suggest you inspect the contents. After this step `rename.py` will also auto-remove.
+1. **Install LuaJIT**:
+   ```bash
+   brew install luajit
+   ```
 
-Now you have a clean plugin environment. Enjoy!
+2. **Install Lua 5.1**:
+   ```bash
+   curl -LO http://www.lua.org/ftp/lua-5.1.5.tar.gz
+   tar xvzf lua-5.1.5.tar.gz
+   cd lua-5.1.5/src
+   make macosx
+   sudo cp lua /usr/local/bin/lua
+   ```
+
+3. **Install Luarocks** (for Lua package management):
+   ```bash
+   brew install luarocks
+   ```
+
+4. **Install SQLite3** (required for database functionality):
+   ```bash
+   brew install sqlite3
+   ```
+
+5. **Set LuaRocks Path**:  
+   Ensure your shell recognizes LuaRocks paths:
+   ```bash
+   eval `luarocks path`
+   ```
+   > _Tip_: To make this permanent, add the above `eval` command to your shell profile (`.bashrc`, `.zshrc`, etc.).
+
+6. **Install `lsqlite3` for Lua 5.1**:
+   ```bash
+   luarocks install lsqlite3 SQLITE_LIBDIR=/usr/local/opt/sqlite/lib SQLITE_INCDIR=/usr/local/opt/sqlite/include
+   ```
+
+7. **Verify Installation**:
+   Open Neovim and run:
+   ```vim
+   :lua require('lsqlite3')
+   ```
+   If no errors occur, the setup is complete.
+
+
+## Plugin Installation
+
+Install the plugin using your preferred plugin manager. For example, if you're using `lazy.nvim`:
+
+```lua
+-- train-nvim plug-in
+return {
+  {
+    'stefanobianchimazzone/train-nvim.lua',
+    config = function()
+      require('train-nvim').setup({
+        -- Configuration options
+        allow_freeride = true,
+        collect_data = true,
+        data_collection_consent = true,
+        log_level = 'info', 
+      })
+    end,
+    dependencies = {
+      'kkharji/sqlite.lua',
+    },
+  },
+}
+```
+
+Ensure all dependencies, like `lsqlite3`, are installed and configured properly.
 
 ## Format
 
@@ -30,9 +94,3 @@ Create test cases in the `test` folder. Busted expects files in this directory t
 - Runs the Busted/vusted integration tests
 - Lints with `stylua`.
 
-
-## More
-
-To see this template in action, take a look at my other plugins.
-
-## License MIT
